@@ -1,0 +1,25 @@
+.promo {
+    width: 100%;
+    padding: 50px 70px 60px 70px;
+    box-sizing: border-box;
+    background-color: #DDDEE3;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.promo__text {
+    margin: 0;
+    font-weight: normal;
+    font-size: 40px;
+    line-height: 52px;
+    letter-spacing: -0.04em;
+    width: 626px;
+}
+
+.promo__logo {
+    width: 722px;
+    height: 244px;
+    align-self: flex-end;
+}
