@@ -1,6 +1,7 @@
 .about-project {
-    padding: 0 70px 110px 70px;
+    padding: 110px 70px 110px 70px;
     box-sizing: border-box;
+    background-color: #FAFAFA;
 }
 
 .about-project__text-panel {
@@ -78,3 +79,9 @@
     display: flex;
     background-color: #F2F2F2;
 }
+
+@media (max-width: 810px) {
+    .about-project {
+        padding: 110px 50px 110px 50px;
+    }
+  }

@@ -1,6 +1,7 @@
 .techs {
-    padding: 0 70px 110px 70px;
+    padding: 100px 70px 110px 70px;
     box-sizing: border-box;
+    background-color:#F5F5F5;
 }
 
 .techs__content {
@@ -31,7 +32,7 @@
 .techs__techs-list {
     margin: 100px auto 0;
     width: 690px;
-    height: 60px;
+    min-height: 60px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     column-gap: 10px;
@@ -50,3 +51,18 @@
 .techs__item-text {
     margin: auto;
 }
+
+@media (max-width: 810px) {
+    .techs {
+        padding: 100px 50px 110px 50px;
+    }
+  }
+
+  @media (max-width: 789px) {
+    .techs__techs-list {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(4, 57px);
+        gap: 10px;
+        width: 178px;
+    }
+  }

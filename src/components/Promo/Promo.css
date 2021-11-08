@@ -23,3 +23,22 @@
     height: 244px;
     align-self: flex-end;
 }
+
+@media (max-width: 810px) {
+    .promo {
+        padding: 300px 44px 70px 44px;
+        overflow: hidden;
+    }
+
+    .promo__text {
+        align-self: center;
+        text-align: center;
+        margin-bottom: 140px;
+    }
+
+    .promo__logo {
+        width: 680px;
+        height: 230px;
+        align-self: center;
+    }
+  }
