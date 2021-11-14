@@ -59,7 +59,6 @@
     font-weight: normal;
     font-size: 14px;
     line-height: 17px;
-
 }
 
 .about-project__week_type_left {
@@ -83,5 +82,62 @@
 @media (max-width: 810px) {
     .about-project {
         padding: 110px 50px 110px 50px;
+    }
+
+    .about-project__text {
+        font-size: 12px;
+        line-height: 18px;
+    }
+  }
+
+  @media (max-width: 405px) {
+    .about-project {
+        padding: 70px 18px;
+    }
+
+    .about-project__info {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .about-project__text-panel {
+        display: flex;
+        flex-direction: column;
+        margin-top: 60px;
+        max-width: 100%;
+    }
+
+    .about-project__info:last-of-type {
+        margin-top: 56px;
+    }
+
+    .about-project__title {
+        margin: 0 0 16px 0;
+        font-size: 18px;
+        line-height: 22px;
+    }
+    
+    .about-project__text {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .about-project__week {
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+    .about-project__part {
+        margin: 10px 0 0;
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+    .about-project__left-period {
+        width: 100px;
+    }
+
+    .about-project__right-period {
+        width: 184px;
     }
   }

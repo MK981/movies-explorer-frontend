@@ -8,10 +8,10 @@ function Footer() {
         <div className="footer__bottom">
             <p className="footer__date">&copy; 2021</p>
             <nav>
-              <ul class="footer__nav">
-                <li class="footer__list-item"><a href="https://practicum.yandex.ru" class="footer__link" target="_blank">Яндекс.Практикум</a></li>
-                <li class="footer__list-item"><a href="https://github.com" class="footer__link" target="_blank">Github</a></li>
-                <li class="footer__list-item"><a href="https://facebook.com" class="footer__link" target="_blank">Facebook</a></li>
+              <ul className="footer__nav">
+                <li className="footer__list-item"><a href="https://practicum.yandex.ru" className="footer__link" target="_blank" rel="noreferrer">Яндекс.Практикум</a></li>
+                <li className="footer__list-item"><a href="https://github.com" className="footer__link" target="_blank" rel="noreferrer">Github</a></li>
+                <li className="footer__list-item"><a href="https://facebook.com" className="footer__link" target="_blank" rel="noreferrer">Facebook</a></li>
               </ul>
             </nav>
         </div>
