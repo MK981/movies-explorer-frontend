@@ -1,0 +1,96 @@
+.card {
+    min-height: 231px;
+    position: relative;
+}
+
+.card__photo {
+    width: 100%;
+}
+
+.card__info {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.card__title {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0;
+}
+
+.card__duration {
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 10px;
+    color: #A0A0A0;
+}
+
+.card__save {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 72px;
+    height: 21px;
+    border: 0;
+    border-radius: 40px;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 9px;
+    cursor: pointer;
+    display: none;
+}
+
+.card__save:hover {
+    opacity: .8;
+}
+
+.card_main_noadded:hover .card__save {
+    display: block;
+}
+
+.card__added {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 21px;
+    height: 21px;
+    background-color: #EE3465;
+    border: 0;
+    border-radius: 50%;
+    background-image: url(../../images/icon-added.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    display: none;
+}
+
+.card__added_active {
+    display: block;
+}
+
+.card__delete {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 21px;
+    height: 21px;
+    border: 0;
+    border-radius: 50%;
+    background-image: url(../../images/icon-delete.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    display: none;
+    cursor: pointer;
+}
+
+.card__delete:hover {
+    opacity: .8;
+}
+
+.card_saved:hover .card__delete {
+    display: block;
+}
