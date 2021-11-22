@@ -1,6 +1,8 @@
 .page {
   max-width: 1280px;
   margin: 0 auto;
-  /*border: 1px solid red;*/
   font-family: 'Inter', Arial, Helvetica, sans-serif;
+  /*height: 100vh;
+  display: flex;
+  flex-direction: column;*/
 }
