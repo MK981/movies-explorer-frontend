@@ -1,9 +1,16 @@
+import React from 'react';
 import './More.css';
 
-function More() {
+function More(props) {
+    /*const [cardsNumber, setCardsNumber] = React.useState(0);
+
+    React.useEffect(() => {
+
+    });*/
+
     return (
         <section className="more">
-            <button type="button" className="more__button">Ещё</button>
+            <button type="button" className="more__button" onClick={props.getMoreCards}>Ещё</button>
         </section>
     );
   }

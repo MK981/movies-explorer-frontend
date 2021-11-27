@@ -3,6 +3,16 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 60px 30px;
+    min-height: 300px;
+}
+
+.no-cards {
+  grid-template-columns: 1fr;
+}
+
+.card-list__message {
+  justify-self: center;
+  margin: 0;
 }
 
 @media (max-width: 1300px) {

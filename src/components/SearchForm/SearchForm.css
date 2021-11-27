@@ -52,11 +52,21 @@
     cursor: pointer;
 }
 
+.search__submit:hover {
+    opacity: .9;
+}
+
 .search__check-form {
     margin: 42px 0 70px;
     align-self: center;
     display: flex;
     align-items: center;
+}
+
+.search__error {
+    color: red;
+    font-size: 15px;
+    text-align: center;
 }
 
 /*.search__label {

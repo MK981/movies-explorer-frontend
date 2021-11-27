@@ -47,8 +47,9 @@
     line-height: 17px;
 }
 
-.auth__input:last-of-type {
-    margin-bottom: 0;
+.auth__input_error {
+    color: red;
+    border-bottom: 1px solid red;
 }
 
 .auth__input:focus {
@@ -65,10 +66,20 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 17px;
+    cursor: pointer;
 }
 
 .auth__submit:hover {
     opacity: .9;
+}
+
+.auth__submit_disabled {
+    background-color: gray;
+    cursor: auto;
+}
+
+.auth__submit_disabled:hover {
+    opacity: 1;
 }
 
 .auth__submit_type_login {
@@ -91,6 +102,14 @@
 
 .auth__link:hover {
     opacity: .8;
+}
+
+.auth__error {
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 12px;
+    color: red;
+    margin-bottom: 15px;
 }
 
 @media (max-width: 800px) {
