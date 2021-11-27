@@ -63,6 +63,12 @@
     align-items: center;
 }
 
+.search__error {
+    color: red;
+    font-size: 15px;
+    text-align: center;
+}
+
 /*.search__label {
     margin-left: 12px;
     font-weight: normal;

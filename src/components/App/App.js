@@ -12,7 +12,7 @@ import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
 import NotFound from '../NotFound/NotFound';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { ProtectedRoute, ProtectedForUser } from '../ProtectedRoute/ProtectedRoute';
 import Preloader from '../Preloader/Preloader';
 import * as mainApi from '../../utils/MainApi';
 import * as moviesApi from '../../utils/MoviesApi';
@@ -29,8 +29,11 @@ function App() {
   const [token, setToken] = React.useState('');
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [authError, setAuthError] = React.useState('');
   const [isLoaderOpen, setIsLoaderOpen] = React.useState(false);
+  const [updateStatus, setUpdateStatus] = React.useState('');
 
+  const [allMovies, setAllMovies] = React.useState([]);
   const [moviesLoader, setMoviesLoader] = React.useState(false);
   const [foundMovies, setFoundMovies] = React.useState([]);
   const [moviesNotFound, setMoviesNotFound] = React.useState(false);
@@ -39,6 +42,7 @@ function App() {
   const [nofilteredMovies, setNoFilteredMovies] = React.useState([]);
 
   const [userMovies, setUserMovies] = React.useState([]);
+  const [userFoundMovies, setUserFoundMovies] = React.useState([]);
 
   React.useEffect(() => {
     function tokenCheck() {
@@ -48,12 +52,16 @@ function App() {
 
           if(token) {
             setIsLoaderOpen(true);
-            mainApi.getUserInfo(token)
-              .then((user) => {
+
+              Promise.all([mainApi.getUserInfo(token), mainApi.getMovies(token)])
+              .then(([user, movies]) => {
                 setLoggedIn(true);
                 setToken(localStorage.getItem('token'));
-                history.push('/movies');
                 setCurrentUser(user);
+
+                //const ourMovies = movies.data.filter((mov) => mov.owner === currentUser._id);
+                setUserMovies(movies.data);
+                setUserFoundMovies(movies.data);
               })
               .catch((err) => {
                 console.log(err);
@@ -62,13 +70,11 @@ function App() {
                 setIsLoaderOpen(false);
               })
 
-              mainApi.getMovies(token)
-                .then((movies) => {
-                  setUserMovies(movies.data);
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
+              if(localStorage.getItem('allMovies')) {
+                setAllMovies(JSON.parse(localStorage.getItem('allMovies')));
+              }
+
+              history.push(location.pathname);
             }
         }
     }
@@ -83,9 +89,11 @@ function App() {
     mainApi.updateUserInfo(name, email, token)
     .then((user) => {
       setCurrentUser(user.data);
+      setUpdateStatus('Данные успешно изменены');
     })
     .catch((err) => {
       console.log(err);
+      setUpdateStatus('Ошибка в изменении данных');
     })
     .finally(() => {
       setIsLoaderOpen(false);
@@ -99,10 +107,15 @@ function App() {
       setLoggedIn(true);
       setToken(localStorage.getItem('token'));
       history.push('/movies');
+      setAuthError('');
     })
     .catch((err) => {
-      console.log(err);})
-    .finally(() => {setIsLoaderOpen(false);})
+      console.log(err);
+      setAuthError(err);
+    })
+    .finally(() => {
+      setIsLoaderOpen(false);
+    })
   }
 
   function onLogin(password, email) {
@@ -113,14 +126,24 @@ function App() {
       setLoggedIn(true);
       setToken(localStorage.getItem('token'));
       history.push('/movies');
+      setAuthError('');
     })
-    .catch(err => console.log(err))
-    .finally(() => {setIsLoaderOpen(false);})
+    .catch((err) => {
+      //console.log(err);
+      setAuthError(err);
+      console.log(authError);
+    })
+    .finally(() => {
+      setIsLoaderOpen(false);
+    })
   }
 
   function onSignOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('allMovies');
+    setFoundMovies([]);
+    setNoFilteredMovies([]);
+    setMoviesNotFound(false);
     setLoggedIn(false);
     setToken('');
     history.push('/');
@@ -129,44 +152,81 @@ function App() {
   function searchMovies(name) {
     let found = [];
     if(location.pathname === '/movies') {
-      setMoviesLoader(true);
-      moviesApi.getMovies()
-      .then((movies) => {
+      if(localStorage.getItem('allMovies')) {
+
         if(shortMovies) {
-          movies.forEach((movie) => {
+          allMovies.forEach((movie) => {
             if(movie.nameRU.toLowerCase().includes(name.toLowerCase())) {
-             found.push(movie);
+              found.push(movie);
             }
           })
         } else {
-          movies.forEach((movie) => {
+          allMovies.forEach((movie) => {
             if(movie.nameRU.toLowerCase().includes(name.toLowerCase()) && movie.duration > 40) {
-             found.push(movie);
+            found.push(movie);
             }
           })
         }
-          setFoundMovies(found);
-          setNoFilteredMovies(found);
-          //console.log(found);
-          //localStorage.setItem('allMovies', found);
-          if(!foundMovies.length) {
-            setMoviesNotFound(true);
-            setSearchMessage('По вашему запросу ничего не найдено :(');
-          }
-      })
-      .catch((err) => {
-        console.log(err);
-        setSearchMessage('Призошла ошибка на сервере');
-      })
-      .finally(() => {setMoviesLoader(false);})
-    } else {
-      userMovies.forEach((movie) => {
-        if(movie.nameRU.toLowerCase().includes(name.toLowerCase())) {
-          found.push(movie);
-         }
-      })
 
-      setUserMovies(found);
+        setFoundMovies(found);
+        setNoFilteredMovies(found);
+        if(!foundMovies.length) {
+          setMoviesNotFound(true);
+          setSearchMessage('По вашему запросу ничего не найдено :(');
+        }
+        setMoviesLoader(false);
+
+      } else {
+
+        setMoviesLoader(true);
+        moviesApi.getMovies()
+        .then((movies) => {
+          if(shortMovies) {
+            movies.forEach((movie) => {
+              if(movie.nameRU.toLowerCase().includes(name.toLowerCase())) {
+                found.push(movie);
+              }
+            })
+          } else {
+            movies.forEach((movie) => {
+              if(movie.nameRU.toLowerCase().includes(name.toLowerCase()) && movie.duration > 40) {
+              found.push(movie);
+              }
+            })
+          }
+            setFoundMovies(found);
+            setNoFilteredMovies(found);
+            localStorage.setItem('allMovies', JSON.stringify(movies));
+            if(!foundMovies.length) {
+              setMoviesNotFound(true);
+              setSearchMessage('По вашему запросу ничего не найдено :(');
+            }
+        })
+        .catch((err) => {
+          console.log(err);
+          setSearchMessage('Призошла ошибка на сервере');
+        })
+        .finally(() => {setMoviesLoader(false);})
+      }
+
+    } else {
+      
+      if(shortMovies) {
+        userMovies.forEach((movie) => {
+          if(movie.nameRU.toLowerCase().includes(name.toLowerCase())) {
+            found.push(movie);
+           }
+        })
+      } else {
+        userMovies.forEach((movie) => {
+          if(movie.nameRU.toLowerCase().includes(name.toLowerCase()) && movie.duration > 40) {
+           found.push(movie);
+          }
+        })
+      }
+      
+      //setUserMovies(found);
+      setUserFoundMovies(found);
       if(!userMovies.length) {
         setMoviesNotFound(true);
         setSearchMessage('По вашему запросу ничего не найдено :(');
@@ -191,7 +251,6 @@ function App() {
       else {
         setShortMovies(true);
         setFoundMovies(nofilteredMovies);
-        //setFoundMovies(localStorage.getItem('allMovies'));
       }
     }
   }
@@ -203,6 +262,7 @@ function App() {
     .then((newFilm) => {
         //setCards((state) => state.map((c) => c._id === card._id ? newCard.data : c));
         setUserMovies([newFilm.data, ...userMovies]);
+        setUserFoundMovies([newFilm.data, ...userFoundMovies]);
     })
     .catch((err) => {
       console.log(err);
@@ -210,10 +270,19 @@ function App() {
   }
 
   function handleFilmDelete(film) {
-    setIsLoaderOpen(true);
-      mainApi.deleteMovie(film._id, token).then(() => {
-          //const newMovies = userMovies.filter((m) => m._id !== film._id);
-          //setUserMovies(newMovies);
+    let id;
+    if(location.pathname === '/saved-movies') {
+      id = film._id;
+    } else {
+      const deleteMovie = userMovies.filter((mov) => mov.nameRU === film.nameRU);
+      id = deleteMovie[0]._id;
+    }
+      setIsLoaderOpen(true);
+      mainApi.deleteMovie(id, token).then(() => {
+          const newUserMovies = userMovies.filter((m) => m._id !== id);
+          const newUserFoundMovies = userFoundMovies.filter((m) => m._id !== id);
+          setUserMovies(newUserMovies);
+          setUserFoundMovies(newUserFoundMovies);
       })
       .catch((err) => {
         console.log(err)
@@ -231,17 +300,24 @@ function App() {
             <Route exact path="/">
               <Main />
             </Route>
-            <Route path="/signup">
-              <Register onRegister={onRegister} />
-            </Route>
-            <Route path="/signin">
-              <Login onLogin={onLogin} />
-            </Route>
+            <ProtectedForUser 
+              path="/signup" 
+              loggedIn={loggedIn} 
+              component={Register} 
+              onRegister={onRegister} 
+              error={authError} 
+            />
+            <ProtectedForUser 
+              path="/signin" 
+              loggedIn={loggedIn} 
+              component={Login} 
+              onLogin={onLogin} 
+              error={authError} 
+            />
             <ProtectedRoute
                 path="/movies"
                 loggedIn={loggedIn}
-                component={Movies}
-                //cards={cards} 
+                component={Movies} 
                 ourCards={userMovies}
                 movies={foundMovies}
                 loader={moviesLoader}
@@ -250,12 +326,13 @@ function App() {
                 message={searchMessage}
                 shortMovies={changeshortMovies}
                 saveFilm={handleFilmSave}
+                deleteFilm={handleFilmDelete}
               />
             <ProtectedRoute
                 path="/saved-movies"
                 loggedIn={loggedIn}
                 component={SavedMovies}
-                movies={userMovies} 
+                movies={userFoundMovies} 
                 deleteFilm={handleFilmDelete}
                 shortMovies={changeshortMovies}
                 search={searchMovies}
@@ -268,10 +345,10 @@ function App() {
                 component={Profile}
                 updateUser={handleUpdateUser}
                 onSignOut={onSignOut}
+                status={updateStatus}
               />
-            <Route path="*">
-              <NotFound />
-            </Route>
+              <ProtectedForUser path="*" loggedIn={loggedIn} component={NotFound} />
+
           </Switch>
 
           {(loggedIn || location.pathname === '/') && location.pathname !== '/profile' 

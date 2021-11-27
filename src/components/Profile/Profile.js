@@ -11,6 +11,7 @@ function Profile(props) {
 
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
+    //const [disabled, setDisabled] = React.useState(true);
 
     React.useEffect(() => {
         setName(user.name);
@@ -34,9 +35,11 @@ function Profile(props) {
         form.resetForm();
     }
 
+    const buttonActive = name !== user.name || email !== user.email;
+
     const nameInputClass = (`profile__input ${form.errors["name-input"] ? 'profile__input_error' : ''}`);
     const emailInputClass = (`profile__input ${form.errors["email-input"] ? 'profile__input_error' : ''}`);
-    const buttonClass = (`profile__submit ${form.errors["name-input"] || form.errors["email-input"] ? 'profile__submit_disabled' : ''}`);
+    const buttonClass = (`profile__submit ${form.errors["name-input"] || form.errors["email-input"] || !buttonActive ? 'profile__submit_disabled' : ''}`);
 
     return (
         <section className="profile">
@@ -53,7 +56,8 @@ function Profile(props) {
                     <input type="email" className={emailInputClass} id="email-input" name="email-input" value={email} onChange={handleEmailChange} required/>
                 </div>
                 {form.errors["email-input"] ? <span className="profile__error">{form.errors["email-input"]}</span> : <></>}
-                <button type="submit" className={buttonClass} disabled={form.errors["name-input"] || form.errors["email-input"]}>Редактировать</button>
+                {props.status !== '' ? <span className="profile__status">{props.status}</span> : <></>}
+                <button type="submit" className={buttonClass} disabled={form.errors["name-input"] || form.errors["email-input"] || !buttonActive}>Редактировать</button>
             </form>
             <button type="button" className="profile__exit" onClick={props.onSignOut}>Выйти из аккаунта</button>
         </section>

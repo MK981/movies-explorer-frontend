@@ -5,8 +5,10 @@ import Preloader from '../Preloader/Preloader';
 import More from '../More/More';
 
 import { useLocation } from 'react-router-dom';
+import { UserContext } from '../../contexts/UserContext';
 
 function MoviesCardList(props) {
+    const user = React.useContext(UserContext);
     const location = useLocation();
     const path = location.pathname === '/movies';
 
@@ -57,6 +59,11 @@ function MoviesCardList(props) {
         }
     }
 
+    let ourMovies;
+    if(props.ourCards) {
+        ourMovies = props.ourCards.filter((mov) => mov.owner === user._id);
+    }
+
     function switchBlocks() {
         if(props.movies.length) {
             return (
@@ -65,11 +72,11 @@ function MoviesCardList(props) {
                         {showCards.map((card, i) => {
                             let movie;
                             if(props.ourCards) {
-                                const check = props.ourCards.some(ourCard => {
+                                const check = ourMovies.some(ourCard => {
                                     return ourCard.nameRU === card.nameRU;
                                 })
-                                movie = <Card key={card.id} saved={check} card={card} path={path} saveFilm={props.saveFilm} />;
-                            } else {
+                                movie = <Card key={card.id} saved={check} card={card} path={path} saveFilm={props.saveFilm} deleteFilm={props.deleteFilm} />;
+                            } else if(card.owner === user._id) {
                                 movie = <Card key={card._id} saved={false} card={card} path={path} deleteFilm={props.deleteFilm} />;
                             }
 

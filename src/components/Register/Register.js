@@ -17,19 +17,17 @@ function Register(props) {
 
     const form = useFormWithValidation();
     const nameInputClass = (`auth__input ${form.errors["name-input"] ? 'auth__input_error' : ''}`);
-    const emailInputClass = (`auth__input ${form.errors["email-input"] ? 'auth__input_error' : ''}`);
+    const emailInputClass = (`auth__input ${form.errors["email-input"] || form.emailerror!=='' ? 'auth__input_error' : ''}`);
     const passInputClass = (`auth__input ${form.errors["pass-input"] ? 'auth__input_error' : ''}`);
 
-    const buttonClass = (`auth__submit ${!form.isValid ? 'auth__submit_disabled' : ''}`);
+    const buttonClass = (`auth__submit ${!form.isValid || form.emailerror!=='' ? 'auth__submit_disabled' : ''}`);
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(form.values["email-input"])
 
         props.onRegister(form.values["pass-input"], form.values["email-input"], form.values["name-input"]);
         form.resetForm();
     }
-
 
     return (
         <div className="auth">
@@ -42,10 +40,12 @@ function Register(props) {
                 <label className="auth__label" htmlFor="email-input">E-mail</label>
                 <input type="email" className={emailInputClass} id="email-input" name="email-input" value={form.values["email-input"] || ''} onChange={form.handleChange} required />
                 {form.errors["email-input"] ? <span className="auth__error">{form.errors["email-input"]}</span> : <></>}
+                {form.emailerror !== '' && !form.errors["email-input"] ? <span className="auth__error">{form.emailerror}</span> : <></>}
                 <label className="auth__label" htmlFor="pass-input">Пароль</label>
                 <input type="password" className={passInputClass} id="pass-input" name="pass-input" value={form.values["pass-input"] || ''} onChange={form.handleChange} minLength="4" maxLength="15" required />
                 {form.errors["pass-input"] ? <span className="auth__error">{form.errors["pass-input"]}</span> : <></>}
-                <button type="submit" className={buttonClass} disabled={!form.isValid}>Зарегистрироваться</button>
+                <button type="submit" className={buttonClass} disabled={!form.isValid || form.emailerror!==''}>Зарегистрироваться</button>
+                {props.error !== '' ? <span className="auth__error">{props.error}</span> : <></>}
             </form>
             <p className="auth__text">Уже зарегистрированы? <Link to="signin" className="auth__link">Войти</Link></p>
         </div>

@@ -14,7 +14,7 @@ function Movies(props) {
         <section className="movies">
             <SearchForm search={props.search} shortMovies={props.shortMovies} />
             <MoviesCardList movies={props.movies} cards={props.cards} ourCards={props.ourCards} 
-            loader={props.loader} notFound={props.notFound} message={props.message} saveFilm={props.saveFilm} />
+            loader={props.loader} notFound={props.notFound} message={props.message} saveFilm={props.saveFilm} deleteFilm={props.deleteFilm} />
         </section>
     );
   }

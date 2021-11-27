@@ -16,11 +16,13 @@ function Card(props) {
 
     return (
         <div className={cardClassName}>
-            <img src={props.path ? src : props.card.image} alt={props.card.nameRU} className="card__photo" />
+            <a href={props.card.trailerLink} target="_blank" rel="noreferrer">
+                <img src={props.path ? src : props.card.image} alt={props.card.nameRU} className="card__photo" />
+            </a>
             {props.path ? 
             <>
                 <button type="button" className="card__save" onClick={onSaveClick}>Сохранить</button>
-                <div className={cardAddedClassName}></div>
+                <div className={cardAddedClassName} onClick={onDeleteClick}></div>
             </> : 
             <button type="button" className="card__delete" onClick={onDeleteClick}></button>}
             <div className="card__info">

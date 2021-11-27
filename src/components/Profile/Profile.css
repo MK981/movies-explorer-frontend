@@ -58,6 +58,11 @@
     margin-bottom: 17px;
 }
 
+.profile__status {
+    text-align: center;
+    margin-top: 30px;
+}
+
 .profile__submit {
     margin-top: 220px;
     font-weight: normal;

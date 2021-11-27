@@ -42,7 +42,7 @@ function Header(props) {
 
     return (
       <header className={headerClassName}>
-          {!mainPath ? 
+          {props.loggedIn ? 
           <>
             <div className="header__left-panel">
               <Link to="/"><img src={logo} alt="Логотип" className="header__logo" /></Link>
